@@ -1,0 +1,5 @@
+syntax = "proto3"
+
+package usermgt;
+
+option go_package = "
