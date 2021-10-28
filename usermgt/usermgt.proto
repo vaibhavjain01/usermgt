@@ -4,6 +4,9 @@ package usermgt;
 
 option go_package = "github.com/vaibhavjain01/usermgt;usermgt_grpc";
 
+import "google/rpc/code.proto";
+import "google/protobuf/any.proto";
+
 service UserMgt {
     rpc CreateNewUser (NewUser) returns (User) {}
 }
@@ -17,4 +20,16 @@ message User {
     string name = 1;
     int32 age = 2;
     int32 id = 3;
+    Error errorDetails = 4;
+}
+
+message Error {
+    message Status {
+        int32 code = 1;
+        string message = 2;
+        google.rpc.Code status = 4;
+        repeated google.protobuf.Any details = 5;
+    }
+
+    Status error = 1;
 }

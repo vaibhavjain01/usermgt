@@ -8,6 +8,9 @@ import (
 
 	pb "github.com/vaibhavjain01/usermgt/usermgt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/genproto/googleapis/rpc/code"
 )
 
 const (
@@ -19,9 +22,18 @@ type UserManagementServer struct {
 }
 
 func (s *UserManagementServer) CreateNewUser (ctx context.Context, in *pb.NewUser) (*pb.User, error) {
+	if len(in.GetName()) < 3 {
+		log.Printf("Received Invalid Name: %v", in.GetName())
+		error_status := &pb.Error_Status {
+			Code: 400, Message: "Name should be more than 3 characters", 
+			Status: code.Code_INVALID_ARGUMENT , Details: nil,
+		}
+		return &pb.User{Name: in.GetName(), Age: in.GetAge(), Id: -1, ErrorDetails: &pb.Error{Error: error_status}}, status.Error(codes.InvalidArgument, "id was not found")
+	}
+
 	log.Printf("Received: %v", in.GetName())
 	var user_id int32 = int32(rand.Intn(1000));
-	return &pb.User{Name: in.GetName(), Age: in.GetAge(), Id: user_id}, nil
+	return &pb.User{Name: in.GetName(), Age: in.GetAge(), Id: user_id, ErrorDetails: nil}, nil
 }
 
 func main() {

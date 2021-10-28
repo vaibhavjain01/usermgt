@@ -28,14 +28,15 @@ func main() {
 
 	var new_users = make(map[string]int32)
 	new_users["Alice"] = 43
-	new_users["Bob"] = 30
+	new_users["Bo"] = 30
 
 	for name, age := range new_users {
 		r, err := c.CreateNewUser(ctx, &pb.NewUser{Name: name, Age: age})
 		if err != nil {
-			log.Fatalf("could not create user: %v", err)
+			log.Printf("%+v\n", r)
+			log.Fatalf("could not create user: *%v*", err)
 		}
-		
+
 		log.Printf(`User Details"
 			NAME: %s
 			AGE: %d
