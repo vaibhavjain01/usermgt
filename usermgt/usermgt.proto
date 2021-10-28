@@ -1,5 +1,20 @@
-syntax = "proto3"
+syntax = "proto3";
 
 package usermgt;
 
-option go_package = "
+option go_package = "github.com/vaibhavjain01/usermgt;usermgt_grpc";
+
+service UserMgt {
+    rpc CreateNewUser (NewUser) returns (User) {}
+}
+
+message NewUser {
+    string name = 1;
+    int32 age = 2;
+}
+
+message User {
+    string name = 1;
+    int32 age = 2;
+    int32 id = 3;
+}
